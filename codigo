@@ -1,0 +1,86 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
+
+#define TOTAL_CARTAS 5
+
+typedef struct {
+    char nome[30];
+    int forca;
+    int velocidade;
+    int inteligencia;
+} Carta;
+
+// Função para imprimir uma carta
+void imprimirCarta(Carta c) {
+    printf("Nome: %s\n", c.nome);
+    printf("Força: %d\n", c.forca);
+    printf("Velocidade: %d\n", c.velocidade);
+    printf("Inteligência: %d\n", c.inteligencia);
+}
+
+// Função para comparar cartas com base no atributo escolhido
+void compararCartas(Carta jogador, Carta computador, int atributo) {
+    int valorJogador, valorComputador;
+
+    switch (atributo) {
+        case 1:
+            valorJogador = jogador.forca;
+            valorComputador = computador.forca;
+            printf("Comparando Força...\n");
+            break;
+        case 2:
+            valorJogador = jogador.velocidade;
+            valorComputador = computador.velocidade;
+            printf("Comparando Velocidade...\n");
+            break;
+        case 3:
+            valorJogador = jogador.inteligencia;
+            valorComputador = computador.inteligencia;
+            printf("Comparando Inteligência...\n");
+            break;
+        default:
+            printf("Atributo inválido!\n");
+            return;
+    }
+
+    printf("Você: %d | Computador: %d\n", valorJogador, valorComputador);
+
+    if (valorJogador > valorComputador)
+        printf("Você venceu esta rodada!\n");
+    else if (valorJogador < valorComputador)
+        printf("O computador venceu esta rodada!\n");
+    else
+        printf("Empate!\n");
+}
+
+int main() {
+    srand(time(NULL));
+
+    Carta baralho[TOTAL_CARTAS] = {
+        {"Dragão", 90, 60, 50},
+        {"Fênix", 70, 80, 60},
+        {"Minotauro", 85, 40, 30},
+        {"Mago", 40, 50, 95},
+        {"Elfo", 60, 75, 70}
+    };
+
+    int indiceJogador = rand() % TOTAL_CARTAS;
+    int indiceComputador;
+
+    // Evita que ambos tenham a mesma carta
+    do {
+        indiceComputador = rand() % TOTAL_CARTAS;
+    } while (indiceComputador == indiceJogador);
+
+    Carta cartaJogador = baralho[indiceJogador];
+    Carta cartaComputador = baralho[indiceComputador];
+
+    printf("Sua carta:\n");
+    imprimirCarta(cartaJogador);
+
+    printf("\nEscolha um atributo para disputar:\n");
+    printf("1 - Força\n");
+    printf("2 - Velocidade\n");
+    printf("
