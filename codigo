@@ -1,56 +1,49 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <string.h>
 
-#define TOTAL_CARTAS 5
+#define TOTAL_CARTAS 20
 
 typedef struct {
     char nome[30];
-    int forca;
-    int velocidade;
-    int inteligencia;
+    int populacao; // em milhoes
+    int area;      // em mil km2
+    int pib;       // PIB per capita em mil USD
 } Carta;
 
-// Função para imprimir uma carta
 void imprimirCarta(Carta c) {
-    printf("Nome: %s\n", c.nome);
-    printf("Força: %d\n", c.forca);
-    printf("Velocidade: %d\n", c.velocidade);
-    printf("Inteligência: %d\n", c.inteligencia);
+    printf("Pais: %s\n", c.nome);
+    printf("Populacao: %d milhoes\n", c.populacao);
+    printf("Area: %d mil km2\n", c.area);
+    printf("PIB per capita: %d mil USD\n", c.pib);
 }
 
-// Função para comparar cartas com base no atributo escolhido
-void compararCartas(Carta jogador, Carta computador, int atributo) {
-    int valorJogador, valorComputador;
+void comparar(Carta jogador, Carta computador, int atributo) {
+    int valJogador, valComputador;
 
-    switch (atributo) {
-        case 1:
-            valorJogador = jogador.forca;
-            valorComputador = computador.forca;
-            printf("Comparando Força...\n");
-            break;
-        case 2:
-            valorJogador = jogador.velocidade;
-            valorComputador = computador.velocidade;
-            printf("Comparando Velocidade...\n");
-            break;
-        case 3:
-            valorJogador = jogador.inteligencia;
-            valorComputador = computador.inteligencia;
-            printf("Comparando Inteligência...\n");
-            break;
-        default:
-            printf("Atributo inválido!\n");
-            return;
+    if (atributo == 1) {
+        printf("Comparando populacao...\n");
+        valJogador = jogador.populacao;
+        valComputador = computador.populacao;
+    } else if (atributo == 2) {
+        printf("Comparando area...\n");
+        valJogador = jogador.area;
+        valComputador = computador.area;
+    } else if (atributo == 3) {
+        printf("Comparando PIB per capita...\n");
+        valJogador = jogador.pib;
+        valComputador = computador.pib;
+    } else {
+        printf("Atributo invalido.\n");
+        return;
     }
 
-    printf("Você: %d | Computador: %d\n", valorJogador, valorComputador);
+    printf("Voce: %d | Computador: %d\n", valJogador, valComputador);
 
-    if (valorJogador > valorComputador)
-        printf("Você venceu esta rodada!\n");
-    else if (valorJogador < valorComputador)
-        printf("O computador venceu esta rodada!\n");
+    if (valJogador > valComputador)
+        printf("Voce venceu!\n");
+    else if (valJogador < valComputador)
+        printf("O computador venceu!\n");
     else
         printf("Empate!\n");
 }
@@ -59,28 +52,52 @@ int main() {
     srand(time(NULL));
 
     Carta baralho[TOTAL_CARTAS] = {
-        {"Dragão", 90, 60, 50},
-        {"Fênix", 70, 80, 60},
-        {"Minotauro", 85, 40, 30},
-        {"Mago", 40, 50, 95},
-        {"Elfo", 60, 75, 70}
+        {"Brasil", 213, 8516, 9},
+        {"Estados Unidos", 331, 9834, 65},
+        {"China", 1440, 9597, 12},
+        {"India", 1390, 3287, 8},
+        {"Russia", 146, 17098, 11},
+        {"Alemanha", 83, 357, 50},
+        {"Franca", 67, 551, 44},
+        {"Japao", 126, 377, 42},
+        {"Reino Unido", 68, 243, 47},
+        {"Canada", 38, 9985, 52},
+        {"Australia", 26, 7692, 54},
+        {"Argentina", 45, 2780, 10},
+        {"Africa do Sul", 60, 1221, 7},
+        {"Mexico", 128, 1964, 10},
+        {"Italia", 60, 301, 41},
+        {"Espanha", 47, 505, 39},
+        {"Coreia do Sul", 52, 100, 44},
+        {"Indonesia", 273, 1905, 6},
+        {"Egito", 104, 1001, 4},
+        {"Nigeria", 206, 923, 2}
     };
 
-    int indiceJogador = rand() % TOTAL_CARTAS;
-    int indiceComputador;
-
-    // Evita que ambos tenham a mesma carta
+    int idxJogador = rand() % TOTAL_CARTAS;
+    int idxComputador;
     do {
-        indiceComputador = rand() % TOTAL_CARTAS;
-    } while (indiceComputador == indiceJogador);
+        idxComputador = rand() % TOTAL_CARTAS;
+    } while (idxJogador == idxComputador);
 
-    Carta cartaJogador = baralho[indiceJogador];
-    Carta cartaComputador = baralho[indiceComputador];
+    Carta jogador = baralho[idxJogador];
+    Carta computador = baralho[idxComputador];
 
     printf("Sua carta:\n");
-    imprimirCarta(cartaJogador);
+    imprimirCarta(jogador);
 
-    printf("\nEscolha um atributo para disputar:\n");
-    printf("1 - Força\n");
-    printf("2 - Velocidade\n");
-    printf("
+    printf("\nEscolha um atributo:\n");
+    printf("1 - Populacao\n");
+    printf("2 - Area\n");
+    printf("3 - PIB per capita\n");
+    int escolha;
+    scanf("%d", &escolha);
+
+    printf("\nCarta do computador:\n");
+    imprimirCarta(computador);
+
+    printf("\nResultado:\n");
+    comparar(jogador, computador, escolha);
+
+    return 0;
+}
